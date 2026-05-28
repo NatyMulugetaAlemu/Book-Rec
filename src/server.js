@@ -1,8 +1,10 @@
 import express from 'express';
 import 'dotenv/config' 
 import authRoutes from './routes/authRoutes.js';
+import bookRoutes from './routes/bookRoutes.js';
 import { connectDB } from './lib/db.js';
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import dns from "node:dns/promises"
 dns.setServers([
@@ -15,9 +17,11 @@ const app=express();
 const PORT=process.env.PORT || 5001;
 
 app.use(express.json());
+app.use(cors());
 app.use(cookieParser()); 
 
 app.use('/api/auth',authRoutes);
+app.use('/api/books',bookRoutes);
 
 app.listen(PORT,()=>{
     connectDB()
