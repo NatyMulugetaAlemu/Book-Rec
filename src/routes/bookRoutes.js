@@ -13,11 +13,11 @@ router.post("/", protectRoute, async (req, res) => {
       return res.status(400).json({ message: "Please provide all fields" });
     }
 
-    // upload the image to cloudinary
+   
     const uploadResponse = await cloudinary.uploader.upload(image);
     const imageUrl = uploadResponse.secure_url;
 
-    // save to the database
+   
     const newBook = new Book({
       title,
       caption,
@@ -35,10 +35,9 @@ router.post("/", protectRoute, async (req, res) => {
   }
 });
 
-// pagination => infinite loading
+
 router.get("/", protectRoute, async (req, res) => {   
-  // example call from react native - frontend
-  // const response = await fetch("http://localhost:3000/api/books?page=1&limit=5");
+  
   try {
     const page = req.query.page || 1;
     const limit = req.query.limit || 2;
@@ -64,7 +63,7 @@ router.get("/", protectRoute, async (req, res) => {
   }
 });
 
-// get recommended books by the logged in user
+
 router.get("/user", protectRoute, async (req, res) => {
   try {
     const books = await Book.find({ user: req.user._id }).sort({ createdAt: -1 });
@@ -80,12 +79,11 @@ router.delete("/:id", protectRoute, async (req, res) => {
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: "Book not found" });
 
-    // check if user is the creator of the book
+   
     if (book.user.toString() !== req.user._id.toString())
       return res.status(401).json({ message: "Unauthorized" });
 
-    // https://res.cloudinary.com/de1rm4uto/image/upload/v1741568358/qyup61vejflxxw8igvi0.png
-    // delete image from cloduinary as well
+    
     if (book.image && book.image.includes("cloudinary")) {
       try {
         const publicId = book.image.split("/").pop().split(".")[0];

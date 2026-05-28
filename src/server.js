@@ -5,6 +5,9 @@ import bookRoutes from './routes/bookRoutes.js';
 import { connectDB } from './lib/db.js';
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import job from './lib/cron.js';
+
+
 
 import dns from "node:dns/promises"
 dns.setServers([
@@ -16,6 +19,7 @@ dns.setServers([
 const app=express();
 const PORT=process.env.PORT || 5001;
 
+job.start();
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser()); 
