@@ -23,11 +23,16 @@ export const signup = async (req, res) => {
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        
+        // get random avatar
+    const profileImage = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+
 
         const newUser = new User({
             username,
             email,
             password: hashedPassword,
+            profileImage,
         });
         if (newUser) {
            
@@ -40,7 +45,7 @@ export const signup = async (req, res) => {
                     _id: newUser._id,
                     username: newUser.username,
                     email: newUser.email,
-                    profilePic: newUser.profilePic,
+                    profileImage: newUser.profileImage,
                 }
 
             });
@@ -75,7 +80,7 @@ export const login = async (req, res) => {
                 _id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                profilePic: newUser.profilePic,
+                profileImage: newUser.profileImage,
             }
         });
     } catch (error) {
